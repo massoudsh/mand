@@ -36,15 +36,20 @@
 ## فاز ۲ — موتور تصمیم و بهینه‌سازی چندکاناله
 `Milestone: Phase 2 — Decision & Optimization Engine` · Epic: [#13](../../issues/13)
 
-هدف: عبور از «score» به «تصمیم» کامل — کانال، زمان، نوع و مقدار مشوق.
+هدف: عبور از «score» به «تصمیم» کامل — کانال، زمان، نوع، مقدار مشوق و **دلیل**. جزئیات معماری
+هر موتور در [[concepts/engines]] (ویکی داخلی) و [[Engines]] (ویکی گیت‌هاب).
 
-- مدل uplift چندگزینه‌ای (multi-treatment)
-- بهینه‌سازی تخصیص با محدودیت بودجه
-- موتور best-time-to-send
-- Policy layer برای قوانین کسب‌وکار
-- API تصمیم برای اتصال به CRM design partner
+- Uplift Engine — مدل uplift چندگزینه‌ای (multi-treatment) — `#TBD-uplift-multi`
+- Optimization Engine — تخصیص بهینه بودجه با محدودیت کل (knapsack/LP روی uplift-per-cost) — `#TBD-optimization`
+- Timing Engine — بهترین زمان ارسال (best-time-to-send) به ازای هر کاربر — `#TBD-timing`
+- Policy Engine — لایه قوانین کسب‌وکار (سقف فرکانس، سقف تخفیف، do-not-disturb) — `#TBD-policy`
+- **Explainability Engine** (جدید) — توضیح‌پذیری هر تصمیم/عدم‌مداخله برای اعتماد design partner — `#TBD-explainability`
+- **Experimentation Engine — پایش مستمر** (جدید) — holdout خودکار + پایش Qini در production فراتر از ارزیابی یک‌باره #10 — `#TBD-experimentation`
+- Decision API — نقطه ورود واحد که موتورهای بالا را orchestrate می‌کند و به CRM/CDP مشتری وصل می‌شود — `#TBD-decision-api`
 
-**خروجی:** موتوری با خروجی «اکشن مشخص»، نه فقط score.
+> `#TBD-*` با اجرای `scripts/create-phase2-issues.sh` (نیازمند `gh auth login` معتبر) به شماره issue واقعی تبدیل می‌شود.
+
+**خروجی:** موتوری با خروجی «اکشن مشخص + دلیل»، نه فقط score.
 
 ---
 
