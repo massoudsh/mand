@@ -4,37 +4,37 @@
 > هر فاز یک [Epic] issue دارد که وضعیت کلی آن فاز را نشان می‌دهد.
 
 ## فاز ۰ — اکتشاف و Design Partner
-`Milestone: Phase 0 — Discovery & Design Partner` · Epic: [#1](../../issues/1)
+`Milestone: Phase 0 — Discovery & Design Partner` · Epic: [#1](https://github.com/massoudsh/mand/issues/1)
 
 هدف: اعتبارسنجی مسئله با یک design partner واقعی و آماده‌سازی داده.
 
-- مصاحبه با تیم‌های Growth/CRM پلتفرم‌های مصرفی ایرانی ([#2](../../issues/2))
-- تعریف ICP و انتخاب کاندیدای design partner ([#3](../../issues/3))
-- امضای LOI با اولین design partner ([#4](../../issues/4))
-- ممیزی و آماده‌سازی داده design partner ([#5](../../issues/5))
+- مصاحبه با تیم‌های Growth/CRM پلتفرم‌های مصرفی ایرانی ([#2](https://github.com/massoudsh/mand/issues/2))
+- تعریف ICP و انتخاب کاندیدای design partner ([#3](https://github.com/massoudsh/mand/issues/3))
+- امضای LOI با اولین design partner ([#4](https://github.com/massoudsh/mand/issues/4))
+- ممیزی و آماده‌سازی داده design partner ([#5](https://github.com/massoudsh/mand/issues/5))
 
 **خروجی:** یک design partner امضاشده + دیتاست آماده برای فاز ۱.
 
 ---
 
 ## فاز ۱ — MVP: هسته Uplift
-`Milestone: Phase 1 — MVP: Uplift Core` · Epic: [#6](../../issues/6)
+`Milestone: Phase 1 — MVP: Uplift Core` · Epic: [#6](https://github.com/massoudsh/mand/issues/6)
 
 هدف: ساخت اولین مدل uplift + churn baseline روی داده design partner، با یک pilot زنده.
 
-- Pipeline استخراج و پاک‌سازی داده ([#7](../../issues/7))
-- مدل churn/risk پایه ([#8](../../issues/8))
-- مدل uplift اول — two-model / uplift tree ([#9](../../issues/9))
-- ارزیابی با Qini curve / uplift metrics ([#10](../../issues/10))
-- Dashboard حداقلی segment‌بندی ([#11](../../issues/11))
-- اجرای pilot زنده و اندازه‌گیری incremental effect ([#12](../../issues/12))
+- Pipeline استخراج و پاک‌سازی داده ([#7](https://github.com/massoudsh/mand/issues/7))
+- مدل churn/risk پایه ([#8](https://github.com/massoudsh/mand/issues/8))
+- مدل uplift اول — two-model / uplift tree ([#9](https://github.com/massoudsh/mand/issues/9))
+- ارزیابی با Qini curve / uplift metrics ([#10](https://github.com/massoudsh/mand/issues/10))
+- Dashboard حداقلی segment‌بندی ([#11](https://github.com/massoudsh/mand/issues/11))
+- اجرای pilot زنده و اندازه‌گیری incremental effect ([#12](https://github.com/massoudsh/mand/issues/12))
 
 **خروجی:** اثبات incremental uplift قابل‌اندازه‌گیری در یک pilot واقعی.
 
 ---
 
 ## فاز ۲ — موتور تصمیم و بهینه‌سازی چندکاناله
-`Milestone: Phase 2 — Decision & Optimization Engine` · Epic: [#13](../../issues/13)
+`Milestone: Phase 2 — Decision & Optimization Engine` · Epic: [#13](https://github.com/massoudsh/mand/issues/13)
 
 هدف: عبور از «score» به «تصمیم» کامل — کانال، زمان، نوع، مقدار مشوق و **دلیل**. جزئیات معماری
 هر موتور در [[concepts/engines]] (ویکی داخلی) و [[Engines]] (ویکی گیت‌هاب).
@@ -47,14 +47,14 @@
 - **Experimentation Engine — پایش مستمر** (جدید) — holdout خودکار + پایش Qini در production فراتر از ارزیابی یک‌باره #10 — `#21`
 - Decision API — نقطه ورود واحد که موتورهای بالا را orchestrate می‌کند و به CRM/CDP مشتری وصل می‌شود — `#22`
 
-> `#TBD-*` با اجرای `scripts/create-phase2-issues.sh` (نیازمند `gh auth login` معتبر) به شماره issue واقعی تبدیل می‌شود.
+> شماره‌های issueهای عملیاتی فاز ۲ در گیت‌هاب ثبت شده‌اند؛ برای جزئیات به issueهای #16 تا #22 مراجعه کنید.
 
 **خروجی:** موتوری با خروجی «اکشن مشخص + دلیل»، نه فقط score.
 
 ---
 
 ## فاز ۳ — محصول SaaS چندمستأجری
-`Milestone: Phase 3 — Multi-tenant SaaS Platform` · Epic: [#14](../../issues/14)
+`Milestone: Phase 3 — Multi-tenant SaaS Platform` · Epic: [#14](https://github.com/massoudsh/mand/issues/14)
 
 هدف: تبدیل به محصول self-serve با onboarding استاندارد برای مشتریان جدید.
 
@@ -70,7 +70,7 @@
 ---
 
 ## فاز ۴ — رشد و توسعه بازار
-`Milestone: Phase 4 — Scale & Vertical Expansion` · Epic: [#15](../../issues/15)
+`Milestone: Phase 4 — Scale & Vertical Expansion` · Epic: [#15](https://github.com/massoudsh/mand/issues/15)
 
 هدف: گسترش عمودی (مارکت‌پلیس، فین‌تک، محتوا) و بستن حلقه یادگیری.
 
