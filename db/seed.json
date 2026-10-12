@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-10-12T00:00:00.000Z",
+  "currency": "IRR",
+  "budget": 850000000,
+  "decisions": [
+    {"id":"usr_1042","name":"کاربر ۱۰۴۲","segment":"وفادارِ در معرض ریزش","riskScore":0.82,"upliftScore":0.31,"expectedValue":164000000,"incentive":35000000,"channel":"Push","timing":"امشب، ۲۰:۳۰","reason":"افت ۴۶٪ در خریدهای ۲۱ روز اخیر؛ واکنش بالا به بازگشت وجه","status":"recommended"},
+    {"id":"usr_2318","name":"کاربر ۲۳۱۸","segment":"فعالِ فرصت‌پذیر","riskScore":0.37,"upliftScore":0.28,"expectedValue":128000000,"incentive":25000000,"channel":"In-app","timing":"فردا، ۱۲:۱۵","reason":"خرید تکراری دارد؛ به پیشنهادهای شخصی‌سازی‌شده پاسخ می‌دهد","status":"recommended"},
+    {"id":"usr_0774","name":"کاربر ۰۷۷۴","segment":"در خطرِ خاموشی","riskScore":0.91,"upliftScore":0.19,"expectedValue":91000000,"incentive":30000000,"channel":"SMS","timing":"امروز، ۱۸:۴۵","reason":"۶۵ روز بدون خرید؛ آخرین پاسخ موفق از کانال پیامک بوده است","status":"recommended"},
+    {"id":"usr_5139","name":"کاربر ۵۱۳۹","segment":"کم‌ارزشِ پرریسک","riskScore":0.79,"upliftScore":0.04,"expectedValue":9000000,"incentive":20000000,"channel":"—","timing":"—","reason":"اثر افزایشی از هزینهٔ مشوق کمتر است؛ مداخله نکنید","status":"holdout"},
+    {"id":"usr_3881","name":"کاربر ۳۸۸۱","segment":"وفادارِ پایدار","riskScore":0.12,"upliftScore":0.06,"expectedValue":34000000,"incentive":15000000,"channel":"Email","timing":"شنبه، ۱۰:۰۰","reason":"ریسک پایین است؛ فقط پیام محتوایی کم‌هزینه پیشنهاد می‌شود","status":"watch"},
+    {"id":"usr_6942","name":"کاربر ۶۹۴۲","segment":"بازگشتیِ ارزشمند","riskScore":0.66,"upliftScore":0.34,"expectedValue":188000000,"incentive":40000000,"channel":"Push","timing":"فردا، ۱۹:۰۰","reason":"پس از وقفه‌های کوتاه با پیشنهاد cashback بازمی‌گردد","status":"recommended"}
+  ]
+}

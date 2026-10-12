@@ -1,0 +1,9 @@
+{
+  "name": "mand",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "start": "node backend/server.js",
+    "test": "node --test backend/*.test.js"
+  }
+}

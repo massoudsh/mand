@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ماند | مرکز تصمیم</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="brand"><span class="brand-mark">م</span><span>ماند</span></div>
+      <div class="hero-copy">
+        <p class="eyebrow">مرکز تصمیم‌گیری · شهریور ۱۴۰۵</p>
+        <h1>بودجه را جایی خرج کن که<br><em>واقعاً اثر می‌کند.</em></h1>
+        <p class="lede">پیشنهادهای ماند با برآورد اثر افزایشی و هزینهٔ هر مداخله اولویت‌بندی شده‌اند.</p>
+      </div>
+      <div class="live"><span></span>دادهٔ دمو · به‌روز</div>
+    </section>
+
+    <section class="metrics" aria-label="شاخص‌های تصمیم">
+      <article><p>ارزش افزایشی پیش‌بینی‌شده</p><strong id="value">—</strong><small>برای تصمیم‌های پیشنهادی</small></article>
+      <article><p>بازده مورد انتظار</p><strong id="roi">—</strong><small>نسبت ارزش افزایشی به مشوق</small></article>
+      <article><p>بودجهٔ رزرو شده</p><strong id="budget">—</strong><small id="remaining">—</small></article>
+      <article><p>مداخله‌های اولویت‌دار</p><strong id="interventions">—</strong><small>در این نوبت تصمیم</small></article>
+    </section>
+
+    <section class="workspace">
+      <header class="section-heading"><div><p class="eyebrow">صف تصمیم امروز</p><h2>کجا مداخله کنیم؟</h2></div><button id="filter" type="button">فقط پیشنهادها</button></header>
+      <div class="table-wrap"><table><thead><tr><th>کاربر / سگمنت</th><th>ریسک</th><th>اثر افزایشی</th><th>اقدام پیشنهادی</th><th>زمان</th><th>چرا؟</th></tr></thead><tbody id="decisions"></tbody></table></div>
+    </section>
+
+    <footer>نمونه‌دادهٔ مصنوعیِ نزدیک به الگوهای CRM · هیچ دادهٔ شخصی واقعی استفاده نشده است.</footer>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
