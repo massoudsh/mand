@@ -41,7 +41,22 @@ function renderCampaigns(campaigns) {
       <h3>${escape(campaign.name)}</h3>
       <p>${escape(campaign.segment)} · ${formatCount(campaign.audience)} مخاطب · ${escape(campaign.sendAt)}</p>
       <div class="campaign-foot"><span>بودجه ${formatMillion(campaign.budget / 1000000)}</span><span class="roi">بازده ${campaign.roi}×</span></div>
+      ${campaign.state === 'draft' ? `<button class="activate-campaign" data-campaign-id="${escape(campaign.id)}" type="button">تأیید و اجرای کمپین</button>` : '<div class="activated">کمپین آمادهٔ اجراست</div>'}
     </article>`).join('');
+  document.querySelectorAll('.activate-campaign').forEach((button) => button.addEventListener('click', () => activateCampaign(button)));
+}
+
+async function activateCampaign(button) {
+  button.disabled = true;
+  button.textContent = 'در حال ثبت…';
+  const response = await fetch(`/api/campaigns/${encodeURIComponent(button.dataset.campaignId)}/activate`, { method: 'POST' });
+  if (!response.ok) {
+    button.disabled = false;
+    button.textContent = response.status === 409 ? 'کمپین قبلاً فعال شده' : 'تلاش دوباره';
+    return;
+  }
+  const campaigns = await getJson('/api/campaigns');
+  renderCampaigns(campaigns.campaigns);
 }
 
 function renderReport(report) {

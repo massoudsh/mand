@@ -57,6 +57,7 @@ APIهای موجود:
 - `GET /api/overview` — شاخص‌ها و تصمیم‌های پیشنهادی
 - `GET /api/segments` — سگمنت‌بندی رفتار کاربران
 - `GET /api/campaigns` — کمپین‌های چندکاناله
+- `POST /api/campaigns/:id/activate` — تأیید اجرای یک کمپین پیش‌نویس
 - `GET /api/report` — گزارش مدیریتی شش‌ماهه
 - `GET /api/comparison` — برگهٔ مقایسهٔ رقابتی و شکاف‌ها
 

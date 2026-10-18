@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { buildOverview } = require('./data');
 const { buildComparison } = require('./market');
-const { buildSegments, buildCampaigns, buildReport } = require('./features');
+const { buildSegments, buildCampaigns, buildReport, activateCampaign } = require('./features');
 
 const frontendDir = path.join(__dirname, '..', 'frontend');
 const contentTypes = { '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8' };
@@ -34,6 +34,13 @@ function createServer() {
     if (request.method === 'GET' && url.pathname === '/api/segments') return sendJson(response, 200, { segments: buildSegments() });
     if (request.method === 'GET' && url.pathname === '/api/campaigns') return sendJson(response, 200, { campaigns: buildCampaigns() });
     if (request.method === 'GET' && url.pathname === '/api/report') return sendJson(response, 200, buildReport());
+    const activationMatch = request.method === 'POST' && url.pathname.match(/^\/api\/campaigns\/([^/]+)\/activate$/);
+    if (activationMatch) {
+      const result = activateCampaign(decodeURIComponent(activationMatch[1]));
+      if (result.error === 'campaign_not_found') return sendJson(response, 404, result);
+      if (result.error === 'campaign_not_draft') return sendJson(response, 409, result);
+      return sendJson(response, 200, result);
+    }
     if (request.method !== 'GET') return sendJson(response, 405, { error: 'Method not allowed' });
     return serveFile(response, url.pathname);
   });
