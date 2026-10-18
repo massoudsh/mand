@@ -10,6 +10,13 @@
   <main class="shell">
     <section class="hero">
       <div class="brand"><span class="brand-mark">م</span><span>ماند</span></div>
+      <nav class="tabs" aria-label="بخش‌های محصول">
+        <button class="tab active" data-view="decisions" type="button">تصمیم‌ها</button>
+        <button class="tab" data-view="segments" type="button">سگمنت‌بندی</button>
+        <button class="tab" data-view="campaigns" type="button">کمپین</button>
+        <button class="tab" data-view="report" type="button">گزارش</button>
+        <button class="tab" data-view="comparison" type="button">مقایسهٔ رقابتی</button>
+      </nav>
       <div class="hero-copy">
         <p class="eyebrow">مرکز تصمیم‌گیری · شهریور ۱۴۰۵</p>
         <h1>بودجه را جایی خرج کن که<br><em>واقعاً اثر می‌کند.</em></h1>
@@ -25,9 +32,33 @@
       <article><p>مداخله‌های اولویت‌دار</p><strong id="interventions">—</strong><small>در این نوبت تصمیم</small></article>
     </section>
 
-    <section class="workspace">
+    <section class="view active" data-view-panel="decisions">
       <header class="section-heading"><div><p class="eyebrow">صف تصمیم امروز</p><h2>کجا مداخله کنیم؟</h2></div><button id="filter" type="button">فقط پیشنهادها</button></header>
       <div class="table-wrap"><table><thead><tr><th>کاربر / سگمنت</th><th>ریسک</th><th>اثر افزایشی</th><th>اقدام پیشنهادی</th><th>زمان</th><th>چرا؟</th></tr></thead><tbody id="decisions"></tbody></table></div>
+    </section>
+
+    <section class="view" data-view-panel="segments">
+      <header class="section-heading"><div><p class="eyebrow">قابلیت افزوده‌شده</p><h2>سگمنت‌بندی رفتار کاربران</h2></div><span class="hint">۶۹ هزار کاربر فعال</span></header>
+      <div id="segments" class="segment-grid"></div>
+    </section>
+
+    <section class="view" data-view-panel="campaigns">
+      <header class="section-heading"><div><p class="eyebrow">قابلیت افزوده‌شده</p><h2>کمپین‌های چندکاناله</h2></div><span class="hint">۳ کمپین</span></header>
+      <div id="campaigns" class="campaign-grid"></div>
+    </section>
+
+    <section class="view" data-view-panel="report">
+      <header class="section-heading"><div><p class="eyebrow">قابلیت افزوده‌شده</p><h2>گزارش مدیریتی</h2></div><span id="report-summary" class="hint">—</span></header>
+      <div class="table-wrap"><table><thead><tr><th>ماه</th><th>درآمد افزایشی</th><th>بودجهٔ مصرف‌شده</th><th>بازده</th><th>رشد ماهانه</th></tr></thead><tbody id="report"></tbody></table></div>
+      <div id="sparkline" class="sparkline" aria-label="روند درآمد افزایشی شش ماه"></div>
+    </section>
+
+    <section class="view" data-view-panel="comparison">
+      <header class="section-heading"><div><p class="eyebrow">برگهٔ مقایسه · <span id="as-of">—</span></p><h2>ما در برابر بازار ایران</h2></div><span id="gap-summary" class="hint">—</span></header>
+      <div class="legend"><span class="dot full"></span>پوشش کامل <span class="dot partial"></span>با فاصله <span class="dot empty"></span>نبودن</div>
+      <div class="table-wrap"><table class="matrix"><thead><tr><th>قابلیت</th><th>وضعیت ماند</th><th>قوی‌ترین رقیب</th><th>شکاف</th></tr></thead><tbody id="comparison"></tbody></table></div>
+      <h3 class="subheading">سه قابلیت پرآوازهٔ رقبا که کلون کردیم</h3>
+      <ol id="top-features" class="top-features"></ol>
     </section>
 
     <footer>نمونه‌دادهٔ مصنوعیِ نزدیک به الگوهای CRM · هیچ دادهٔ شخصی واقعی استفاده نشده است.</footer>

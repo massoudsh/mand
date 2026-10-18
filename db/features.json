@@ -1,0 +1,22 @@
+{
+  "segments": [
+    {"id": "champions", "label": "وفادارِ ارزشمند", "count": 18420, "share": 0.26, "risk": 0.18, "value": 1240000000, "tone": "green"},
+    {"id": "at-risk", "label": "وفادارِ در معرض ریزش", "count": 11980, "share": 0.17, "risk": 0.74, "value": 860000000, "tone": "red"},
+    {"id": "promising", "label": "فعالِ فرصت‌پذیر", "count": 15660, "share": 0.22, "risk": 0.36, "value": 640000000, "tone": "amber"},
+    {"id": "dormant", "label": "خاموشِ بازگشتی", "count": 9860, "share": 0.14, "risk": 0.88, "value": 310000000, "tone": "red"},
+    {"id": "low-value", "label": "کم‌ارزشِ پرریسک", "count": 15080, "share": 0.21, "risk": 0.81, "value": 140000000, "tone": "slate"}
+  ],
+  "campaigns": [
+    {"id": "cmp_3021", "name": "بازگشت کاربران ۳۰ روزه", "segment": "خاموشِ بازگشتی", "channel": "Push + SMS", "audience": 9860, "sendAt": "امشب، ۲۰:۳۰", "budget": 48000000, "expectedRevenue": 231000000, "state": "draft"},
+    {"id": "cmp_3022", "name": "پاداش وفاداری پلکانی", "segment": "وفادارِ ارزشمند", "channel": "In-app", "audience": 18420, "sendAt": "شنبه، ۱۰:۰۰", "budget": 120000000, "expectedRevenue": 410000000, "state": "draft"},
+    {"id": "cmp_3019", "name": "بازگردانی سبد رهاشده", "segment": "فعالِ فرصت‌پذیر", "channel": "SMS", "audience": 15660, "sendAt": "ارسال شد", "budget": 36000000, "expectedRevenue": 148000000, "state": "sent"}
+  ],
+  "monthly": [
+    {"month": "فروردین", "revenue": 420, "committed": 118},
+    {"month": "اردیبهشت", "revenue": 465, "committed": 132},
+    {"month": "خرداد", "revenue": 398, "committed": 126},
+    {"month": "تیر", "revenue": 510, "committed": 141},
+    {"month": "مرداد", "revenue": 548, "committed": 138},
+    {"month": "شهریور", "revenue": 612, "committed": 130}
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "asOf": "۱۴۰۵/۰۷",
+  "criteria": [
+    {"key": "segmentation", "label": "سگمنت‌بندی و تحلیل رفتار"},
+    {"key": "campaign", "label": "کمپین چندکاناله و خودکارسازی"},
+    {"key": "journey", "label": "سفر مشتری و trigger رفتاری"},
+    {"key": "incremental", "label": "سنجش اثر افزایشی (uplift) و گروه کنترل"},
+    {"key": "budget", "label": "بهینه‌سازی و کنترل بودجه"},
+    {"key": "explain", "label": "توضیح و دلیل تصمیم"},
+    {"key": "bi", "label": "داشبورد BI و گزارش مدیریتی"},
+    {"key": "connectors", "label": "اتصال به CRM/CDP و درگاه پیام"}
+  ],
+  "rivals": [
+    {"name": "پلتفرم‌های CRM/CDP سازمانی", "examples": "پیام‌گستر، دیدار، یکتانت", "note": "پوشش عمیق سگمنت و کمپین؛ سنجش افزایشی معمولاً با آزمون A/B ساده", "coverage": {"segmentation": 3, "campaign": 3, "journey": 2, "incremental": 1, "budget": 1, "explain": 1, "bi": 3, "connectors": 3}},
+    {"name": "ابزار کمپین و اتوماسیون بازاریابی", "examples": "وفادار، تیکو، رسانه‌ای‌ها", "note": "اجرای سریع پیام و push؛ بهینه‌سازی بودجه و توضیح‌پذیری معمولاً دستی است", "coverage": {"segmentation": 2, "campaign": 3, "journey": 3, "incremental": 1, "budget": 1, "explain": 1, "bi": 2, "connectors": 3}},
+    {"name": "BI و ابزار تحلیل داخلی", "examples": "داشبورد تحلیلی، ابزارهای کوئری", "note": "گزارش‌های دقیق گذشته را نشان می‌دهد، اما تصمیم و اقدام مداخله‌ای پیشنهاد نمی‌دهد", "coverage": {"segmentation": 3, "campaign": 1, "journey": 1, "incremental": 1, "budget": 1, "explain": 1, "bi": 3, "connectors": 2}},
+    {"name": "ماند (نسخهٔ فعلی)", "examples": "این اپ", "note": "تمرکز بر تصمیم، دلیل و کنترل گروه کنترل؛ فاقد اجرای کمپین، سفر مشتری و گزارش مدیریتی", "coverage": {"segmentation": 2, "campaign": 1, "journey": 1, "incremental": 3, "budget": 2, "explain": 3, "bi": 1, "connectors": 1}},
+    {"name": "ماند (پس از این نسخه)", "examples": "قابلیت‌های تازه‌افزوده‌شده", "note": "شکاف‌های اصلی کمپین و گزارش مدیریتی پر شده است؛ اجرای واقعی کانال و باشگاه وفاداری باقی است", "coverage": {"segmentation": 3, "campaign": 2, "journey": 2, "incremental": 3, "budget": 2, "explain": 3, "bi": 3, "connectors": 1}}
+  ],
+  "topFeatures": [
+    {"id": "segmentation", "title": "سگمنت‌بندی و تحلیل رفتار", "why": "پرتکرارترین ویژگی برندشدهٔ رقبا؛ تحلیل هم‌گروهی کاربران", "status": "ready"},
+    {"id": "campaign", "title": "کمپین چندکاناله", "why": "اجرای پیام/پیامک/push با قالب آماده و زمان‌بندی", "status": "ready"},
+    {"id": "bi", "title": "گزارش مدیریتی BI", "why": "داشبورد مدیریتی با مقایسهٔ دوره‌ها — زبان مشترک مدیران رشد", "status": "ready"}
+  ]
+}
