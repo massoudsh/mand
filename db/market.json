@@ -21,5 +21,12 @@
     {"id": "segmentation", "title": "سگمنت‌بندی و تحلیل رفتار", "why": "پرتکرارترین ویژگی برندشدهٔ رقبا؛ تحلیل هم‌گروهی کاربران", "status": "ready"},
     {"id": "campaign", "title": "کمپین چندکاناله", "why": "اجرای پیام/پیامک/push با قالب آماده و زمان‌بندی", "status": "ready"},
     {"id": "bi", "title": "گزارش مدیریتی BI", "why": "داشبورد مدیریتی با مقایسهٔ دوره‌ها — زبان مشترک مدیران رشد", "status": "ready"}
+  ],
+  "priorityFeatures": [
+    {"id": "connector-hub", "title": "هاب اتصال کانال‌ها", "reason": "رقبا روی اتصال SMS، push، تلفن و CRM مزیت اجرایی دارند.", "value": "تصمیم مستقیماً به کانال مشتری می‌رسد.", "priority": "P0", "status": "planned"},
+    {"id": "journey-builder", "title": "سازندهٔ سفر مشتری", "reason": "اتوماسیون trigger و شاخه‌بندی، شکاف اصلی بین score و اجرای مداوم است.", "value": "کمپین‌های چندمرحله‌ای بدون کار دستی.", "priority": "P0", "status": "planned"},
+    {"id": "loyalty-wallet", "title": "کیف پول وفاداری", "reason": "باشگاه مشتریان و امتیازدهی در CRMهای سازمانی ایرانی پرتکرار است.", "value": "مشوق قابل‌ردیابی با موجودی، انقضا و سقف هزینه.", "priority": "P1", "status": "planned"},
+    {"id": "experiment-center", "title": "مرکز آزمایش A/B و Holdout", "reason": "رقبا تست A/B دارند؛ ماند باید اثر افزایشی را با کنترل و Qini عمیق‌تر کند.", "value": "اثبات incremental value، نه فقط نرخ کلیک.", "priority": "P1", "status": "planned"},
+    {"id": "contact-timeline", "title": "تایم‌لاین تماس و خدمات", "reason": "مرکز تماس و تاریخچهٔ تعامل در راهکارهای سازمانی مزیت مهم است.", "value": "دلیل تصمیم با سابقهٔ واقعی تعامل کامل می‌شود.", "priority": "P2", "status": "planned"}
   ]
 }

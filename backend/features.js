@@ -4,10 +4,6 @@ const path = require('node:path');
 const featuresPath = path.join(__dirname, '..', 'db', 'features.json');
 const featureStore = JSON.parse(fs.readFileSync(featuresPath, 'utf8'));
 
-function loadFeatures() {
-  return JSON.parse(JSON.stringify(featureStore));
-}
-
 function buildSegments(features = featureStore) {
   return features.segments.map((segment) => ({
     ...segment,
@@ -46,4 +42,4 @@ function activateCampaign(campaignId) {
   return { campaign: buildCampaigns().find(({ id }) => id === campaignId) };
 }
 
-module.exports = { activateCampaign, buildSegments, buildCampaigns, buildReport, loadFeatures };
+module.exports = { activateCampaign, buildSegments, buildCampaigns, buildReport };

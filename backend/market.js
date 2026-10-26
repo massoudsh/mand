@@ -23,7 +23,8 @@ function buildComparison(market = loadMarket()) {
     rivals: market.rivals,
     gaps,
     openGapCount: gaps.filter(({ gap }) => gap > 0).length,
-    topFeatures: market.topFeatures
+    topFeatures: market.topFeatures,
+    priorityFeatures: market.priorityFeatures
   };
 }
 

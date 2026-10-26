@@ -77,6 +77,8 @@ function renderComparison(comparison) {
     <td><span class="gap ${gap.gap ? 'open' : 'closed'}">${gap.gap ? `${number.format(gap.gap)} فاصله` : 'هم‌تراز'}</span></td></tr>`).join('');
   document.querySelector('#top-features').innerHTML = comparison.topFeatures.map((feature, index) => `
     <li><span class="rank">${number.format(index + 1)}</span><div><strong>${escape(feature.title)}</strong><p>${escape(feature.why)}</p></div><span class="pill sent">در اپ فعال شد</span></li>`).join('');
+  document.querySelector('#priority-features').innerHTML = comparison.priorityFeatures.map((feature) => `
+    <article class="priority-card"><header><span class="priority">${escape(feature.priority)}</span><span class="pill">در نقشه‌راه</span></header><h4>${escape(feature.title)}</h4><p>${escape(feature.reason)}</p><small>${escape(feature.value)}</small></article>`).join('');
 }
 
 function coverage(score) {
