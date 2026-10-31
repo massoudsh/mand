@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+input { font:inherit; padding:9px; border:1px solid var(--line); border-radius:8px; max-width:100%; }
+:focus-visible { outline:3px solid #17825d; outline-offset:3px; }
+details { margin-top:12px; font-size:12px; line-height:1.8; }
+summary { cursor:pointer; }
+details ul { padding-inline-start:20px; }
 
 :root { --ink:#17201e; --muted:#6e7773; --line:#dfe5df; --paper:#f8f9f5; --green:#096b55; --lime:#d7ff70; --coral:#ff6f5e; }
 * { box-sizing:border-box; }

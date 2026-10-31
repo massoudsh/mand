@@ -1,54 +1,81 @@
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
-const { buildOverview } = require('./data');
+const { randomUUID } = require('node:crypto');
+const { buildOverview, loadSeed } = require('./data');
 const { buildComparison } = require('./market');
-const { buildSegments, buildCampaigns, buildReport, activateCampaign } = require('./features');
+const { buildSegments, buildCampaigns, buildReport } = require('./features');
+const { createStore } = require('./store');
+const { createDispatcher } = require('./dispatch');
+const { readConfig, authorize } = require('./config');
 
 const frontendDir = path.join(__dirname, '..', 'frontend');
-const contentTypes = { '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8' };
+const files = { '/': ['index.html', 'text/html'], '/app.js': ['app.js', 'application/javascript'], '/styles.css': ['styles.css', 'text/css'] };
 
-function sendJson(response, statusCode, body) {
-  response.writeHead(statusCode, { 'content-type': 'application/json; charset=utf-8' });
+function sendJson(response, status, body) {
+  response.writeHead(status, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' });
   response.end(JSON.stringify(body));
 }
 
-function serveFile(response, requestedPath) {
-  const fileName = requestedPath === '/' ? 'index.html' : requestedPath.slice(1);
-  const filePath = path.resolve(frontendDir, fileName);
-  if (!filePath.startsWith(`${frontendDir}${path.sep}`) || !fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
-    response.writeHead(404);
-    response.end('Not found');
-    return;
-  }
-  response.writeHead(200, { 'content-type': contentTypes[path.extname(filePath)] ?? 'application/octet-stream' });
-  fs.createReadStream(filePath).pipe(response);
+function failure(response, status, code) {
+  return sendJson(response, status, { error: { code, message: code.replaceAll('_', ' ') } });
 }
 
-function createServer() {
-  return http.createServer((request, response) => {
-    const url = new URL(request.url, 'http://localhost');
-    if (request.method === 'GET' && url.pathname === '/api/overview') return sendJson(response, 200, buildOverview());
-    if (request.method === 'GET' && url.pathname === '/api/health') return sendJson(response, 200, { status: 'ok' });
-    if (request.method === 'GET' && url.pathname === '/api/comparison') return sendJson(response, 200, buildComparison());
-    if (request.method === 'GET' && url.pathname === '/api/segments') return sendJson(response, 200, { segments: buildSegments() });
-    if (request.method === 'GET' && url.pathname === '/api/campaigns') return sendJson(response, 200, { campaigns: buildCampaigns() });
-    if (request.method === 'GET' && url.pathname === '/api/report') return sendJson(response, 200, buildReport());
-    const activationMatch = request.method === 'POST' && url.pathname.match(/^\/api\/campaigns\/([^/]+)\/activate$/);
-    if (activationMatch) {
-      const result = activateCampaign(decodeURIComponent(activationMatch[1]));
-      if (result.error === 'campaign_not_found') return sendJson(response, 404, result);
-      if (result.error === 'campaign_not_draft') return sendJson(response, 409, result);
-      return sendJson(response, 200, result);
+function createServer({ config = readConfig(), store = createStore(config.dbPath), dispatcher = createDispatcher(store), autoDispatch = true } = {}) {
+  const server = http.createServer((request, response) => {
+    response.setHeader('X-Request-Id', randomUUID());
+    response.setHeader('X-Content-Type-Options', 'nosniff');
+    response.setHeader('Referrer-Policy', 'no-referrer');
+    try {
+      const url = new URL(request.url, 'http://localhost');
+      if (request.method === 'GET') {
+        if (url.pathname === '/api/health') return sendJson(response, 200, { status: 'ok' });
+        if (url.pathname === '/api/ready') {
+          store.run('ready');
+          if (!dispatcher.adapter.ready()) throw new Error('Adapter unavailable');
+          return sendJson(response, 200, { status: 'ok', mode: 'simulation' });
+        }
+        if (url.pathname === '/api/overview') return sendJson(response, 200, buildOverview({ ...loadSeed(), decisions: store.run('decisions') }));
+        if (url.pathname === '/api/comparison') return sendJson(response, 200, buildComparison());
+        if (url.pathname === '/api/segments') return sendJson(response, 200, { segments: buildSegments({ segments: store.run('segments') }) });
+        if (url.pathname === '/api/campaigns') return sendJson(response, 200, { campaigns: buildCampaigns({ campaigns: store.run('campaigns') }) });
+        if (url.pathname === '/api/report') return sendJson(response, 200, buildReport());
+        if (files[url.pathname]) {
+          const [file, type] = files[url.pathname];
+          const content = fs.readFileSync(path.join(frontendDir, file));
+          response.writeHead(200, { 'content-type': `${type}; charset=utf-8` });
+          return response.end(content);
+        }
+        return failure(response, 404, 'not_found');
+      }
+      const match = url.pathname.match(/^\/api\/campaigns\/([a-zA-Z0-9_-]+)\/activate$/);
+      if (request.method !== 'POST' || !match) return failure(response, 405, 'method_not_allowed');
+      const identity = authorize(request.headers.authorization, config);
+      if (!identity) return failure(response, 401, 'authentication_required');
+      if (identity.role !== 'approver') return failure(response, 403, 'approver_required');
+      const key = request.headers['idempotency-key'];
+      if (typeof key !== 'string' || !/^[\w-]{8,128}$/.test(key)) return failure(response, 400, 'idempotency_key_required');
+      const result = store.run('activate', { campaignId: match[1], actor: identity.actor, key });
+      if (result.code) return failure(response, result.status, result.code);
+      return sendJson(response, result.status, { campaign: result.campaign });
+    } catch {
+      return failure(response, request.url === '/api/ready' ? 503 : 500, 'dependency_unavailable');
     }
-    if (request.method !== 'GET') return sendJson(response, 405, { error: 'Method not allowed' });
-    return serveFile(response, url.pathname);
   });
+  if (autoDispatch) {
+    const timer = setInterval(() => dispatcher.dispatch().catch(() => {}), 1000);
+    timer.unref();
+    server.once('close', () => clearInterval(timer));
+  }
+  return server;
 }
 
 if (require.main === module) {
-  const port = Number(process.env.PORT || 3000);
-  createServer().listen(port, () => console.log(`Mand is running on port ${port}`));
+  const config = readConfig();
+  const store = createStore(config.dbPath);
+  store.run('migrate');
+  store.run('seed');
+  createServer({ config, store }).listen(config.port, () => console.log(`Mand simulation server on port ${config.port}`));
 }
 
 module.exports = { createServer };

@@ -1,0 +1,12 @@
+PRAGMA foreign_keys = ON;
+CREATE TABLE IF NOT EXISTS segments (id TEXT PRIMARY KEY, data TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, segment TEXT NOT NULL, holdout INTEGER NOT NULL CHECK(holdout IN (0,1)), cap INTEGER NOT NULL CHECK(cap >= 0));
+CREATE TABLE IF NOT EXISTS decisions (id TEXT PRIMARY KEY REFERENCES users(id), data TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS experiments (id TEXT PRIMARY KEY, data TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS campaigns (id TEXT PRIMARY KEY, data TEXT NOT NULL, state TEXT NOT NULL CHECK(state IN ('draft','queued','sending','sent','failed')), unit_cost INTEGER NOT NULL CHECK(unit_cost >= 0), cap INTEGER NOT NULL CHECK(cap >= 0));
+CREATE TABLE IF NOT EXISTS recipients (campaign_id TEXT REFERENCES campaigns(id), user_id TEXT REFERENCES users(id), status TEXT NOT NULL DEFAULT 'pending', attempts INTEGER NOT NULL DEFAULT 0, provider_id TEXT, error TEXT, PRIMARY KEY(campaign_id,user_id));
+CREATE TABLE IF NOT EXISTS reservations (campaign_id TEXT REFERENCES campaigns(id), user_id TEXT REFERENCES users(id), cost INTEGER NOT NULL CHECK(cost >= 0), PRIMARY KEY(campaign_id,user_id));
+CREATE TABLE IF NOT EXISTS activations (key TEXT PRIMARY KEY, campaign_id TEXT NOT NULL, actor TEXT NOT NULL, response TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS audit_log (id INTEGER PRIMARY KEY, actor TEXT NOT NULL, campaign_id TEXT NOT NULL, event TEXT NOT NULL, timestamp TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS outbox (key TEXT PRIMARY KEY, provider_id TEXT NOT NULL, payload TEXT NOT NULL);
+PRAGMA user_version = 1;

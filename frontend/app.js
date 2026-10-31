@@ -9,6 +9,12 @@ const body = document.querySelector('#decisions');
 const filter = document.querySelector('#filter');
 let decisions = [];
 let recommendedOnly = false;
+const activationKeys = new Map();
+const stateLabels = { draft: 'پیش‌نویس', queued: 'در صف', sending: 'در حال شبیه‌سازی', sent: 'شبیه‌سازی تأیید شد', failed: 'شبیه‌سازی ناموفق' };
+
+function renderExplanation(value) {
+  return `<details><summary>دلیل و محدودیت‌ها</summary><ul>${value.factors.map((factor) => `<li>${escape(factor)}</li>`).join('')}</ul><p>${escape(value.counterfactual)}</p><small>دادهٔ مصنوعی · اطمینان آماری محاسبه نشده</small></details>`;
+}
 
 function renderDecisions() {
   const visible = recommendedOnly ? decisions.filter((item) => item.status === 'recommended') : decisions;
@@ -18,7 +24,7 @@ function renderDecisions() {
       <td><span class="score ${item.riskScore >= .65 ? 'risk-high' : 'risk-low'}">${formatScore(item.riskScore)}</span></td>
       <td><span class="uplift">${formatScore(item.upliftScore)}</span></td>
       <td><span class="action ${item.status === 'holdout' ? 'none' : ''}">${item.status === 'holdout' ? 'بدون مداخله' : `${escape(item.channel)} · ${formatIrr(item.incentive)}`}</span></td>
-      <td>${escape(item.timing)}</td><td class="reason">${escape(item.reason)}</td>
+      <td>${escape(item.timing)}</td><td class="reason">${renderExplanation(item.explanation)}</td>
     </tr>`).join('');
   filter.textContent = recommendedOnly ? 'نمایش همه' : 'فقط پیشنهادها';
   filter.classList.toggle('active', recommendedOnly);
@@ -31,32 +37,48 @@ function renderSegments(segments) {
       <strong>${formatCount(segment.count)}</strong>
       <small>${formatScore(segment.share)} از کاربران فعال</small>
       <dl><dt>ریسک</dt><dd>${formatScore(segment.risk)}</dd><dt>ارزش ۹۰ روزه</dt><dd>${formatIrr(segment.value)}</dd></dl>
+      ${renderExplanation(segment.explanation)}
     </article>`).join('');
 }
 
 function renderCampaigns(campaigns) {
   document.querySelector('#campaigns').innerHTML = campaigns.map((campaign) => `
     <article class="campaign-card">
-      <header><span class="pill ${campaign.state === 'sent' ? 'sent' : ''}">${campaign.state === 'sent' ? 'ارسال‌شده' : 'پیش‌نویس'}</span><span class="channel">${escape(campaign.channel)}</span></header>
+      <header><span class="pill ${campaign.state === 'sent' ? 'sent' : ''}">${escape(stateLabels[campaign.state] || campaign.state)}</span><span class="channel">${escape(campaign.channel)}</span></header>
       <h3>${escape(campaign.name)}</h3>
       <p>${escape(campaign.segment)} · ${formatCount(campaign.audience)} مخاطب · ${escape(campaign.sendAt)}</p>
-      <div class="campaign-foot"><span>بودجه ${formatMillion(campaign.budget / 1000000)}</span><span class="roi">بازده ${campaign.roi}×</span></div>
-      ${campaign.state === 'draft' ? `<button class="activate-campaign" data-campaign-id="${escape(campaign.id)}" type="button">تأیید و اجرای کمپین</button>` : '<div class="activated">کمپین آمادهٔ اجراست</div>'}
+      <div class="campaign-foot"><span>سقف ${formatIrr(campaign.budget)}</span><span>هزینه ${formatIrr(campaign.expectedCost)}</span></div>
+      ${renderExplanation(campaign.explanation)}
+      ${campaign.state === 'draft' ? `<button class="activate-campaign" data-campaign-id="${escape(campaign.id)}" type="button">تأیید شبیه‌سازی کمپین</button>` : `<div class="activated">${escape(stateLabels[campaign.state])} · بدون ارسال واقعی</div>`}
     </article>`).join('');
   document.querySelectorAll('.activate-campaign').forEach((button) => button.addEventListener('click', () => activateCampaign(button)));
 }
 
 async function activateCampaign(button) {
+  const input = document.querySelector('#approver-key');
+  const status = document.querySelector('#campaign-status');
+  if (!input.value) { status.textContent = 'کلید مسئول تأیید لازم است.'; input.focus(); return; }
+  if (!window.confirm('فقط شبیه‌سازی انجام می‌شود و پیامی ارسال نخواهد شد. تأیید می‌کنید؟')) return;
+  const id = button.dataset.campaignId;
+  if (!activationKeys.has(id)) activationKeys.set(id, crypto.randomUUID());
   button.disabled = true;
-  button.textContent = 'در حال ثبت…';
-  const response = await fetch(`/api/campaigns/${encodeURIComponent(button.dataset.campaignId)}/activate`, { method: 'POST' });
-  if (!response.ok) {
+  try {
+    const response = await fetch(`/api/campaigns/${encodeURIComponent(id)}/activate`, {
+      method: 'POST', headers: { Authorization: `Bearer ${input.value}`, 'Idempotency-Key': activationKeys.get(id) }
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      const messages = { 401: 'کلید معتبر نیست.', 403: 'نقش مسئول تأیید لازم است.', 409: 'کمپین قبلاً تغییر کرده است.', 422: 'هزینه از سقف کمپین یا مشتری بیشتر است.' };
+      throw new Error(messages[response.status] || result.error.message);
+    }
+    status.textContent = 'کمپین در صف شبیه‌سازی ثبت شد؛ برای وضعیت نهایی تازه‌سازی کنید.';
+    renderCampaigns((await getJson('/api/campaigns')).campaigns);
+  } catch (error) {
+    status.textContent = error.message || 'ارتباط قطع شد؛ با همان درخواست دوباره تلاش کنید.';
+  } finally {
+    input.value = '';
     button.disabled = false;
-    button.textContent = response.status === 409 ? 'کمپین قبلاً فعال شده' : 'تلاش دوباره';
-    return;
   }
-  const campaigns = await getJson('/api/campaigns');
-  renderCampaigns(campaigns.campaigns);
 }
 
 function renderReport(report) {
@@ -73,7 +95,7 @@ function renderComparison(comparison) {
   document.querySelector('#as-of').textContent = comparison.asOf;
   document.querySelector('#gap-summary').textContent = `${number.format(comparison.openGapCount)} شکاف باز از ${number.format(comparison.criteria.length)} معیار`;
   document.querySelector('#comparison').innerHTML = comparison.gaps.map((gap) => `
-    <tr><td>${escape(gap.label)}</td><td>${coverage(gap.ourScore)}</td><td>${coverage(gap.bestRivalScore)}</td>
+    <tr><td>${escape(gap.label)} ${gap.sourceType === 'estimated' ? '<span class="pill">برآورد تأییدنشده</span>' : ''}</td><td>${coverage(gap.ourScore)}</td><td>${coverage(gap.bestRivalScore)}</td>
     <td><span class="gap ${gap.gap ? 'open' : 'closed'}">${gap.gap ? `${number.format(gap.gap)} فاصله` : 'هم‌تراز'}</span></td></tr>`).join('');
   document.querySelector('#top-features').innerHTML = comparison.topFeatures.map((feature, index) => `
     <li><span class="rank">${number.format(index + 1)}</span><div><strong>${escape(feature.title)}</strong><p>${escape(feature.why)}</p></div><span class="pill sent">در اپ فعال شد</span></li>`).join('');
@@ -114,6 +136,10 @@ async function load() {
   renderComparison(comparison);
 }
 
+document.querySelector('#refresh-campaigns').addEventListener('click', async () => {
+  try { renderCampaigns((await getJson('/api/campaigns')).campaigns); }
+  catch { document.querySelector('#campaign-status').textContent = 'دریافت وضعیت ناموفق بود؛ دوباره تلاش کنید.'; }
+});
 filter.addEventListener('click', () => { recommendedOnly = !recommendedOnly; renderDecisions(); });
 document.querySelectorAll('.tab').forEach((tab) => tab.addEventListener('click', () => showView(tab.dataset.view)));
 load().catch(() => { body.innerHTML = '<tr><td colspan="6">بارگذاری داده با خطا روبه‌رو شد.</td></tr>'; });

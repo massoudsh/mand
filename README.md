@@ -1,5 +1,7 @@
 # ماند (Mand)
 
+[![CI](https://github.com/massoudsh/mand/actions/workflows/ci.yml/badge.svg)](https://github.com/massoudsh/mand/actions/workflows/ci.yml)
+
 **ماند — جایی خرج کن که واقعاً اثر می‌کند.**
 *Mand — Spend your growth budget where it actually works.*
 
@@ -38,12 +40,49 @@ retention و incentive خرج می‌کنند و ROI برایشان حیاتی �
 
 ## اجرای MVP
 
-نیازمندی: Node.js 20 یا جدیدتر.
+نیازمندی: Node.js 20.20.2 و Python 3.12 با SQLite استاندارد؛ بدون dependency اجرایی npm.
 
 ```bash
-npm test
+npm ci
+npm run db:migrate
+npm run db:seed
+npm run lint
+npm run test:coverage
+npm run build
 npm start
 ```
+
+`build` فقط سه فایل static را در `dist/` کپی می‌کند؛ UI به backend همان دامنه نیاز دارد. سرور از `frontend/` سرو می‌کند. شروع سرور migration و seed غیرمخرب را هم اجرا می‌کند. تست‌ها DB واقعی موقت می‌سازند و پاک می‌کنند؛ دادهٔ دمو در `db/mand.sqlite` می‌ماند و به Git نمی‌رود. schema در `db/schema.sql` و bridge تراکنشی SQLite در `db/store.py` است. این bridge همگام برای دمو کم‌ترافیک است، نه استقرار پرترافیک.
+
+### تنظیمات و فعال‌سازی
+
+| متغیر | پیش‌فرض / قرارداد |
+|---|---|
+| `PORT` | 3000؛ عدد صحیح 1 تا 65535 |
+| `MAND_DB_PATH` | `db/mand.sqlite`؛ پوشهٔ والد باید موجود باشد |
+| `MAND_APPROVER_KEY` | خالی: عملیات نوشتن بسته است؛ کلید اختصاصی حداقل 32 کاراکتر |
+| `MAND_VIEWER_KEY` | اختیاری، متمایز از کلید approver؛ اجازهٔ فعال‌سازی ندارد |
+| `ENABLE_LIVE_SENDS` | `false`؛ مقدار دیگری پشتیبانی نمی‌شود و boot را متوقف می‌کند |
+
+کلیدها را فقط از طریق تنظیمات امن استقرار فراهم کنید؛ در Git، لاگ یا گفتگو قرار ندهید. رابط کمپین کلید را فقط برای همان درخواست می‌گیرد و پس از درخواست پاک می‌کند. برای استقرار شبکه‌ای HTTPS الزامی است. APIهای GET فعلاً عمومی و فقط برای دادهٔ مصنوعی‌اند؛ قبل از ورود دادهٔ واقعی، احراز هویت خواندن و جداسازی tenant لازم است.
+
+فعال‌سازی به `Authorization: Bearer …` و `Idempotency-Key` با 8 تا 128 حرف/عدد/خط تیره نیاز دارد. بدون احراز هویت 401، نقش viewer برابر 403، سقف هزینه 422 و تعارض وضعیت/کلید 409 است. پاسخ تکراری همان کلید و actor/cache ثابت می‌ماند. وضعیت روزآمد را از GET کمپین‌ها بگیرید.
+
+هزینهٔ هر مخاطب از `unit_cost` دیتابیس محاسبه می‌شود؛ سقف کمپین و هزینهٔ رزروشدهٔ تجمعی مشتری در یک تراکنش بررسی می‌شوند. گیرندگان holdout هرگز رزرو یا ارسال نمی‌شوند. بودجه‌ها به ریال‌اند. رزرو پس از شکست هم محافظه‌کارانه حفظ می‌شود؛ آزادسازی/تسویه خودکار هنوز وجود ندارد.
+
+چرخهٔ کمپین `draft → queued → sending → sent|failed` است. worker درون همان سرور هر ثانیه صف پایدار را بررسی می‌کند، حداکثر سه تلاش می‌کند و نتیجهٔ هر گیرنده را ثبت می‌کند. `FileAdapter.send(recipient, template, metadata)` خروجی `{status, providerId, error?}` دارد؛ کلید idempotency در metadata است. adapter مرجع رسید یکتا را در جدول `outbox` فایل SQLite ثبت می‌کند. **sent فقط تأیید شبیه‌ساز است، نه تحویل SMS/push واقعی.** adapter واقعی باید idempotency سمت provider را تضمین کند؛ در این نسخه اتصال زنده نداریم.
+
+### قراردادها و تغییرات 0.2.0
+
+- فعال‌سازی بدون کلید و وضعیت قدیمی `active` حذف شدند؛ فراخوان‌ها باید قرارداد بالا را رعایت کنند.
+- خطاهای API همیشه `{error: {code, message}}` و دارای `X-Request-Id` هستند؛ stack و اطلاعات محرمانه ارسال نمی‌شود.
+- `explanation` در تصمیم، سگمنت و پیشنهاد کمپین شامل `factors: string[]`، `counterfactual: string`، `confidence: null` و `sourceType: synthetic` است. null یعنی اطمینان آماری اندازه‌گیری نشده، نه صفر.
+- مقایسه برای هر ردیف `sourceType: estimated`، `sourceDate` و `confidence: null` دارد؛ هیچ برآوردی تأییدشده معرفی نمی‌شود. خود ماند دیگر جزو رقبا محاسبه نمی‌شود.
+- فونت خارجی حذف شد؛ UI از فونت سیستم استفاده می‌کند و بدون CDN کار می‌کند.
+- CI آستانهٔ 80٪ پوشش خطوط JavaScript بک‌اند را enforce می‌کند، به‌جز فایل‌های تست. SQLite/Python با تست یکپارچه بررسی می‌شود ولی درصد پوشش Python اندازه‌گیری نمی‌شود. محافظت merge نیازمند required کردن check در تنظیمات مخزن است.
+- [روش و محدودیت‌های دادهٔ مصنوعی](docs/SYNTHETIC_DATA.md): بازیابی uplift در benchmark تصادفی، نه تأیید مدل تولیدی.
+
+این نسخه موارد Bug A–I پیوست را در محدودهٔ دمو هدف می‌گیرد. سفر مشتری، کیف پول، مرکز آزمایش محصولی، تایم‌لاین، allocator، کتابخانه قالب، export و OpenAPI هنوز قابلیت‌های آینده‌اند. تست مرورگری اجرا نشده است.
 
 ساختار اجرا:
 
@@ -53,7 +92,8 @@ npm start
 
 APIهای موجود:
 
-- `GET /api/health` — وضعیت سرویس
+- `GET /api/health` — زنده‌بودن فرایند
+- `GET /api/ready` — سلامت DB و adapter؛ خرابی برابر 503
 - `GET /api/overview` — شاخص‌ها و تصمیم‌های پیشنهادی
 - `GET /api/segments` — سگمنت‌بندی رفتار کاربران
 - `GET /api/campaigns` — کمپین‌های چندکاناله

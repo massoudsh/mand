@@ -10,17 +10,18 @@ function loadMarket() {
 
 function buildComparison(market = loadMarket()) {
   const app = market.rivals[APP_MARKET_INDEX];
-  const rivals = market.rivals.filter((_, index) => index !== APP_MARKET_INDEX);
+  const rivals = market.rivals.slice(0, APP_MARKET_INDEX);
+  const provenance = { sourceType: 'estimated', sourceDate: '2026-10-18', confidence: null };
   const gaps = market.criteria.map((criterion) => {
     const bestRivalScore = Math.max(...rivals.map((rival) => rival.coverage[criterion.key]));
     const ourScore = app.coverage[criterion.key];
-    return { ...criterion, ourScore, bestRivalScore, gap: Math.max(0, bestRivalScore - ourScore) };
+    return { ...criterion, ...provenance, ourScore, bestRivalScore, gap: Math.max(0, bestRivalScore - ourScore) };
   });
 
   return {
     asOf: market.asOf,
     criteria: market.criteria,
-    rivals: market.rivals,
+    rivals: market.rivals.map((rival) => ({ ...rival, ...provenance })),
     gaps,
     openGapCount: gaps.filter(({ gap }) => gap > 0).length,
     topFeatures: market.topFeatures,

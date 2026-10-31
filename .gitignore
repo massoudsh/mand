@@ -3,6 +3,11 @@
 .noqte/
 .whisper-cache/
 
+# Local database and generated test data
+db/*.sqlite*
+db/.test-*/
+coverage/
+
 # Dependencies
 node_modules/
 .pnp/

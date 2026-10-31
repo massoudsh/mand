@@ -1,5 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { decisionExplanation } = require('./explanation');
 
 const seedPath = path.join(__dirname, '..', 'db', 'seed.json');
 
@@ -18,10 +19,10 @@ function buildOverview(seed = loadSeed()) {
     committedBudget,
     remainingBudget: seed.budget - committedBudget,
     expectedIncrementalValue,
-    expectedRoi: Number((expectedIncrementalValue / committedBudget).toFixed(2)),
+    expectedRoi: committedBudget ? Number((expectedIncrementalValue / committedBudget).toFixed(2)) : null,
     interventionCount: recommended.length,
     holdoutCount: seed.decisions.filter(({ status }) => status === 'holdout').length,
-    decisions: seed.decisions
+    decisions: seed.decisions.map((decision) => ({ ...decision, explanation: decisionExplanation(decision) }))
   };
 }
 

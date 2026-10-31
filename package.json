@@ -1,9 +1,16 @@
 {
   "name": "mand",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "engines": { "node": ">=20.20.2 <21" },
   "scripts": {
     "start": "node backend/server.js",
-    "test": "node --test backend/*.test.js"
+    "test": "node --test backend/*.test.js",
+    "test:coverage": "node scripts/coverage.js",
+    "lint": "node scripts/check.js",
+    "build": "node scripts/build.js",
+    "db:migrate": "node backend/store.js migrate",
+    "db:seed": "node backend/store.js seed",
+    "gen:data": "node backend/synthetic.js"
   }
 }

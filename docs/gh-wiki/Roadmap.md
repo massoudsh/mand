@@ -11,6 +11,10 @@
 | ۳ — SaaS چندمستأجری | Phase 3 — Multi-tenant SaaS Platform | #14 | محصول self-serve، اتصال به CRM/CDP |
 | ۴ — Scale | Phase 4 — Scale & Vertical Expansion | #15 | گسترش عمودی + closed-loop optimization |
 
+## نسخهٔ دمو 0.2.0
+
+زیرساخت SQLite، فعال‌سازی مجاز و idempotent، سقف هزینه، audit و worker شبیه‌سازی اضافه شده‌اند. receipt فقط تأیید adapter فایل است، نه ارسال واقعی. benchmark مصنوعی برای baseline تفاضل میانگین‌ها، explanation ساختاریافته، provenance برآوردی و CI با آستانهٔ پوشش خطوط JavaScript بک‌اند ۸۰٪ اضافه شده‌اند. pilot و قابلیت‌های آینده تکمیل نشده‌اند؛ قراردادها در README اصلی است.
+
 ## فاز ۲ — موتورهای جدید (بازبینی ۱۴۰۵/۰۵/۲۵)
 فاز ۲ به ۷ موتور مستقل تجزیه شد (جزئیات کامل: [[Engines]]):
 Uplift Engine چندگزینه‌ای، Optimization Engine، Timing Engine، Policy Engine،

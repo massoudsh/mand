@@ -1,0 +1,11 @@
+# Synthetic uplift benchmark
+
+Run `npm run gen:data -- --users 10000 --seed 42`. Output is a JSON array on stdout; use `npm run --silent gen:data -- ...` for machine-readable output. An optional `--true-uplift config.json` accepts a map of segment names to `{ "baseline": 0.3, "uplift": 0.15 }`.
+
+The seeded 32-bit LCG provides reproducible pseudorandomness, not cryptographic randomness. Segment membership is balanced round-robin. Treatment is randomized independently at 50%; binary outcomes are Bernoulli with probability `baseline + treatment * uplift`. Both probabilities must be within [0,1]. User counts are limited to 4–1,000,000; generated identifiers are synthetic and do not correspond to people.
+
+The benchmark estimator is a stratified difference in treated/control outcome means. It consumes only segment, treatment, and outcome, never the ground-truth field. Validation separately compares against known ground truth. Default segments include persuadable (+0.15) and sleeping-dog (-0.15) effects. Tests use 40,000 users for seeds 42, 51, and 127 and require recovery within **3 absolute percentage points**, not 3 percent relative error. A biased positive estimate for the negative-uplift group must fail. Missing treatment/control arms return null and fail validation.
+
+This harness validates a simple randomized baseline, not the hardcoded dashboard scores or a trained causal model. It has no confounding, temporal drift, interference, delayed outcomes, unequal propensities, or observational selection bias. It is not evidence of production uplift or statistical confidence for Iranian consumers. Real partner data, experimental design, and out-of-sample validation remain necessary.
+
+The dashboard seed remains a small, separate fixture. Its counts, monetary values, reasons, and competitor coverage are illustrative. Confidence is deliberately null. Dispatch uses only four eligible fixture users and skips two non-recommended/control users, not the large marketing audience counts from the original mock cards. Per-recipient incentive cost is 10,000,000 IRR and cumulative customer cap is 100,000,000 IRR in the SQLite seed. Campaign caps are copied from fixture budgets. No phone numbers or real identities are included.

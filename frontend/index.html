@@ -44,6 +44,11 @@
 
     <section class="view" data-view-panel="campaigns">
       <header class="section-heading"><div><p class="eyebrow">قابلیت افزوده‌شده</p><h2>کمپین‌های چندکاناله</h2></div><span class="hint">۳ کمپین</span></header>
+      <p class="hint">فقط شبیه‌سازی؛ هیچ پیام واقعی ارسال نمی‌شود. اطلاعات کلید ذخیره نمی‌شود.</p>
+      <label for="approver-key">کلید مسئول تأیید</label>
+      <input id="approver-key" type="password" autocomplete="off" dir="ltr">
+      <button id="refresh-campaigns" type="button">تازه‌سازی وضعیت</button>
+      <p id="campaign-status" role="status" aria-live="polite"></p>
       <div id="campaigns" class="campaign-grid"></div>
     </section>
 

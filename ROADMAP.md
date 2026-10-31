@@ -3,6 +3,10 @@
 > این نقشه راه با milestoneها و issueهای گیت‌هاب همگام است.
 > هر فاز یک [Epic] issue دارد که وضعیت کلی آن فاز را نشان می‌دهد.
 
+## وضعیت نسخهٔ دمو 0.2.0
+
+موارد Bug A–I پیوست `uploads/mand.md` با زیرساخت دمو پیاده‌سازی شده‌اند: SQLite، نقش approver و audit، idempotency و سقف هزینه، adapter فایل و صف شبیه‌سازی، benchmark مصنوعی uplift، explanation و provenance، CI و آستانهٔ پوشش. این به معنی تکمیل pilot یا اتصال ارسال واقعی نیست. نسخهٔ اولیهٔ schema و APIهای خواندن عمومی فقط برای دادهٔ مصنوعی مناسب‌اند؛ required check گیت‌هاب باید توسط مدیر مخزن فعال شود. قابلیت‌های بخش Features پیوست همچنان در backlog هستند.
+
 ## فاز ۰ — اکتشاف و Design Partner
 `Milestone: Phase 0 — Discovery & Design Partner` · Epic: [#1](https://github.com/massoudsh/mand/issues/1)
 
