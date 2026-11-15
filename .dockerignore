@@ -1,0 +1,16 @@
+.git
+.github
+.noqte
+.vibe
+node_modules
+coverage
+dist
+uploads
+docs
+*.log
+.env
+.env.*
+!.env.example
+db/*.sqlite*
+db/.test-*/
+backend/*.test.js

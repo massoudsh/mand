@@ -54,6 +54,32 @@ npm start
 
 `build` فقط سه فایل static را در `dist/` کپی می‌کند؛ UI به backend همان دامنه نیاز دارد. سرور از `frontend/` سرو می‌کند. شروع سرور migration و seed غیرمخرب را هم اجرا می‌کند. تست‌ها DB واقعی موقت می‌سازند و پاک می‌کنند؛ دادهٔ دمو در `db/mand.sqlite` می‌ماند و به Git نمی‌رود. schema در `db/schema.sql` و bridge تراکنشی SQLite در `db/store.py` است. این bridge همگام برای دمو کم‌ترافیک است، نه استقرار پرترافیک.
 
+### اجرا با Docker
+
+ایمیج بر پایهٔ `node:20.20.2-bookworm-slim` است و Python 3.11 (فقط کتابخانهٔ استاندارد) را برای bridge نصب می‌کند. برنامه با کاربر غیرroot اجرا می‌شود، فایل SQLite در volume مسیر `/data` می‌ماند و healthcheck از `/api/ready` استفاده می‌کند.
+
+```bash
+docker build -t mand:0.2.0 .
+docker run -d --name mand -p 3000:3000 \
+  -e MAND_APPROVER_KEY="<at-least-32-characters>" \
+  -v mand-data:/data \
+  mand:0.2.0
+```
+
+یا با Compose:
+
+```bash
+cp .env.example .env   # سپس MAND_APPROVER_KEY را پر کنید
+docker compose up -d --build
+```
+
+- `MAND_DB_PATH` در ایمیج روی `/data/mand.sqlite` تنظیم شده است؛ volume را حذف نکنید مگر بخواهید دادهٔ دمو از نو ساخته شود.
+- بدون `MAND_APPROVER_KEY` سرویس بالا می‌آید اما فعال‌سازی کمپین بسته است (401).
+- `ENABLE_LIVE_SENDS` فقط `false` را می‌پذیرد؛ ارسال واقعی SMS/push وجود ندارد.
+- پورت را با `-p <host-port>:3000` تغییر دهید؛ `PORT` داخل کانتینر را عوض نکنید مگر healthcheck و mapping را هم هماهنگ کنید.
+- برای استقرار عمومی HTTPS و یک reverse proxy لازم است؛ خود ایمیج TLS terminate نمی‌کند.
+- ساخت ایمیج را روی میزبان Docker اجرا کنید، نه در محیط توسعهٔ محدود.
+
 ### تنظیمات و فعال‌سازی
 
 | متغیر | پیش‌فرض / قرارداد |

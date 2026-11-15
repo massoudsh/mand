@@ -1,0 +1,22 @@
+services:
+  mand:
+    build: .
+    image: mand:0.2.0
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      MAND_DB_PATH: /data/mand.sqlite
+      ENABLE_LIVE_SENDS: "false"
+      MAND_APPROVER_KEY: ${MAND_APPROVER_KEY:-}
+      MAND_VIEWER_KEY: ${MAND_VIEWER_KEY:-}
+    volumes:
+      - mand-data:/data
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+volumes:
+  mand-data:

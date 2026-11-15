@@ -19,3 +19,24 @@ jobs:
       - run: npm run db:migrate && npm run db:seed
       - run: npm run test:coverage
       - run: npm run build
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          tags: mand:ci
+      - name: Smoke test container
+        run: |
+          docker run -d --name mand-ci -p 3000:3000 \
+            -e MAND_APPROVER_KEY="$(openssl rand -hex 24)" mand:ci
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:3000/api/ready; then exit 0; fi
+            sleep 1
+          done
+          docker logs mand-ci
+          exit 1
