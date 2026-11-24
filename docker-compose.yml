@@ -1,7 +1,7 @@
 services:
   mand:
     build: .
-    image: mand:0.2.0
+    image: mand:0.3.0
     ports:
       - "3000:3000"
     environment:

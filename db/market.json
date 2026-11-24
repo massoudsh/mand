@@ -15,7 +15,7 @@
     {"name": "ابزار کمپین و اتوماسیون بازاریابی", "examples": "وفادار، تیکو، رسانه‌ای‌ها", "note": "اجرای سریع پیام و push؛ بهینه‌سازی بودجه و توضیح‌پذیری معمولاً دستی است", "coverage": {"segmentation": 2, "campaign": 3, "journey": 3, "incremental": 1, "budget": 1, "explain": 1, "bi": 2, "connectors": 3}},
     {"name": "BI و ابزار تحلیل داخلی", "examples": "داشبورد تحلیلی، ابزارهای کوئری", "note": "گزارش‌های دقیق گذشته را نشان می‌دهد، اما تصمیم و اقدام مداخله‌ای پیشنهاد نمی‌دهد", "coverage": {"segmentation": 3, "campaign": 1, "journey": 1, "incremental": 1, "budget": 1, "explain": 1, "bi": 3, "connectors": 2}},
     {"name": "ماند (نسخهٔ فعلی)", "examples": "این اپ", "note": "تمرکز بر تصمیم، دلیل و کنترل گروه کنترل؛ فاقد اجرای کمپین، سفر مشتری و گزارش مدیریتی", "coverage": {"segmentation": 2, "campaign": 1, "journey": 1, "incremental": 3, "budget": 2, "explain": 3, "bi": 1, "connectors": 1}},
-    {"name": "ماند (پس از این نسخه)", "examples": "قابلیت‌های تازه‌افزوده‌شده", "note": "شکاف‌های اصلی کمپین و گزارش مدیریتی پر شده است؛ اجرای واقعی کانال و باشگاه وفاداری باقی است", "coverage": {"segmentation": 3, "campaign": 2, "journey": 2, "incremental": 3, "budget": 2, "explain": 3, "bi": 3, "connectors": 1}}
+    {"name": "ماند (پس از این نسخه)", "examples": "قابلیت‌های تازه‌افزوده‌شده", "note": "سفر، هاب کانال، کیف پول و مرکز آزمایش در ۰.۳.۰ اضافه شد؛ تایم‌لاین خدمات و اتصال زندهٔ کانال باقی است", "coverage": {"segmentation": 3, "campaign": 3, "journey": 3, "incremental": 3, "budget": 3, "explain": 3, "bi": 3, "connectors": 2}}
   ],
   "topFeatures": [
     {"id": "segmentation", "title": "سگمنت‌بندی و تحلیل رفتار", "why": "پرتکرارترین ویژگی برندشدهٔ رقبا؛ تحلیل هم‌گروهی کاربران", "status": "ready"},
@@ -23,10 +23,10 @@
     {"id": "bi", "title": "گزارش مدیریتی BI", "why": "داشبورد مدیریتی با مقایسهٔ دوره‌ها — زبان مشترک مدیران رشد", "status": "ready"}
   ],
   "priorityFeatures": [
-    {"id": "connector-hub", "title": "هاب اتصال کانال‌ها", "reason": "رقبا روی اتصال SMS، push، تلفن و CRM مزیت اجرایی دارند.", "value": "تصمیم مستقیماً به کانال مشتری می‌رسد.", "priority": "P0", "status": "planned"},
-    {"id": "journey-builder", "title": "سازندهٔ سفر مشتری", "reason": "اتوماسیون trigger و شاخه‌بندی، شکاف اصلی بین score و اجرای مداوم است.", "value": "کمپین‌های چندمرحله‌ای بدون کار دستی.", "priority": "P0", "status": "planned"},
-    {"id": "loyalty-wallet", "title": "کیف پول وفاداری", "reason": "باشگاه مشتریان و امتیازدهی در CRMهای سازمانی ایرانی پرتکرار است.", "value": "مشوق قابل‌ردیابی با موجودی، انقضا و سقف هزینه.", "priority": "P1", "status": "planned"},
-    {"id": "experiment-center", "title": "مرکز آزمایش A/B و Holdout", "reason": "رقبا تست A/B دارند؛ ماند باید اثر افزایشی را با کنترل و Qini عمیق‌تر کند.", "value": "اثبات incremental value، نه فقط نرخ کلیک.", "priority": "P1", "status": "planned"},
+    {"id": "connector-hub", "title": "هاب اتصال کانال‌ها", "reason": "رقبا روی اتصال SMS، push، تلفن و CRM مزیت اجرایی دارند.", "value": "تصمیم مستقیماً به کانال مشتری می‌رسد.", "priority": "P0", "status": "ready"},
+    {"id": "journey-builder", "title": "سازندهٔ سفر مشتری", "reason": "اتوماسیون trigger و شاخه‌بندی، شکاف اصلی بین score و اجرای مداوم است.", "value": "کمپین‌های چندمرحله‌ای بدون کار دستی.", "priority": "P0", "status": "ready"},
+    {"id": "loyalty-wallet", "title": "کیف پول وفاداری", "reason": "باشگاه مشتریان و امتیازدهی در CRMهای سازمانی ایرانی پرتکرار است.", "value": "مشوق قابل‌ردیابی با موجودی، انقضا و سقف هزینه.", "priority": "P1", "status": "ready"},
+    {"id": "experiment-center", "title": "مرکز آزمایش A/B و Holdout", "reason": "رقبا تست A/B دارند؛ ماند باید اثر افزایشی را با کنترل و Qini عمیق‌تر کند.", "value": "اثبات incremental value، نه فقط نرخ کلیک.", "priority": "P1", "status": "ready"},
     {"id": "contact-timeline", "title": "تایم‌لاین تماس و خدمات", "reason": "مرکز تماس و تاریخچهٔ تعامل در راهکارهای سازمانی مزیت مهم است.", "value": "دلیل تصمیم با سابقهٔ واقعی تعامل کامل می‌شود.", "priority": "P2", "status": "planned"}
   ]
 }

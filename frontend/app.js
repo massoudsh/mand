@@ -3,6 +3,7 @@ const formatIrr = (value) => `${number.format(Math.round(value / 1000000))} می
 const formatMillion = (value) => `${number.format(value)} م.ت`;
 const formatScore = (value) => new Intl.NumberFormat('fa-IR', { style: 'percent', maximumFractionDigits: 0 }).format(value);
 const formatCount = (value) => number.format(value);
+const decimal = (value) => new Intl.NumberFormat('fa-IR', { maximumFractionDigits: 3 }).format(value);
 const escape = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 
 const body = document.querySelector('#decisions');
@@ -100,12 +101,64 @@ function renderComparison(comparison) {
   document.querySelector('#top-features').innerHTML = comparison.topFeatures.map((feature, index) => `
     <li><span class="rank">${number.format(index + 1)}</span><div><strong>${escape(feature.title)}</strong><p>${escape(feature.why)}</p></div><span class="pill sent">در اپ فعال شد</span></li>`).join('');
   document.querySelector('#priority-features').innerHTML = comparison.priorityFeatures.map((feature) => `
-    <article class="priority-card"><header><span class="priority">${escape(feature.priority)}</span><span class="pill">در نقشه‌راه</span></header><h4>${escape(feature.title)}</h4><p>${escape(feature.reason)}</p><small>${escape(feature.value)}</small></article>`).join('');
+    <article class="priority-card"><header><span class="priority">${escape(feature.priority)}</span><span class="pill ${feature.status === 'ready' ? 'sent' : ''}">${feature.status === 'ready' ? 'در اپ فعال شد' : 'در نقشه‌راه'}</span></header><h4>${escape(feature.title)}</h4><p>${escape(feature.reason)}</p><small>${escape(feature.value)}</small></article>`).join('');
 }
 
 function coverage(score) {
   const dots = [1, 2, 3].map((level) => `<i class="dot ${level <= score ? 'full' : 'empty'}"></i>`).join('');
   return `<span class="coverage" aria-label="${score} از 3">${dots}</span>`;
+}
+
+function renderGrowth(growth) {
+  const { scan, journeys, connectors, experiments, loyalty, timing } = growth;
+  const statusLabels = { integrated: 'این نسخه', existing: 'از قبل موجود', roadmap: 'نقشهٔ راه', 'not-covered': 'بدون پوشش' };
+  const decisions = { ship: 'اجرا شود', stop: 'متوقف شود', continue: 'ادامهٔ آزمون' };
+  document.querySelector('#scan-as-of').textContent = scan.asOf;
+  document.querySelector('#scan-summary').textContent = `${formatCount(scan.rivals.length)} رقیب · ${formatCount(scan.selected.length)} قابلیت یکپارچه‌شده`;
+  document.querySelector('#scan-methodology').textContent = scan.methodology;
+  document.querySelector('#rivals').innerHTML = scan.rivals.map((rival) => `
+    <tr><td><strong>${escape(rival.name)}</strong><span class="segment">${escape(rival.category)}</span></td>
+    <td><span class="pill">${rival.region === 'iran' ? 'ایران' : 'بین‌المللی'}</span></td>
+    <td class="feature-list">${escape(rival.featureLabels.join(' · '))}</td>
+    <td class="reason">${escape(rival.note)}</td></tr>`).join('');
+  document.querySelector('#feature-ranking').innerHTML = scan.ranking.map((feature) => `
+    <span class="rank-chip ${escape(feature.status)}"><b>${formatCount(feature.rank)}</b> ${escape(feature.label)} <small>${formatCount(feature.rivalCount)} رقیب · ${escape(statusLabels[feature.status])}</small></span>`).join('');
+
+  document.querySelector('#journeys').innerHTML = journeys.map((journey) => `
+    <article class="journey-card">
+      <header><span class="pill">${escape(journey.trigger)}</span><span class="channel">${escape(journey.segment)}</span></header>
+      <h4>${escape(journey.name)}</h4>
+      <ol class="funnel">${journey.steps.map((step) => `
+        <li><span class="day">روز ${formatCount(step.day)}</span><strong>${escape(step.label)}</strong><small>${formatCount(step.conversions)} تبدیل · ${formatIrr(step.projectedRevenue)}</small></li>`).join('')}</ol>
+      <div class="campaign-foot"><span>نرخ کل ${formatScore(journey.conversionRate)}</span><span class="roi">${formatIrr(journey.projectedRevenue)}</span></div>
+      ${renderExplanation(journey.explanation)}
+    </article>`).join('');
+
+  document.querySelector('#connectors').innerHTML = connectors.connectors.map((connector) => `
+    <article class="connector ${connector.active ? 'active' : ''}">
+      <header><strong>${escape(connector.label)}</strong><span class="pill ${connector.active ? 'sent' : ''}">${connector.active ? 'متصل به کمپین' : 'آماده'}</span></header>
+      <small>${formatCount(connector.simulatedThroughput)} پیام/ساعت · ${formatIrr(connector.unitCost)} هر پیام</small>
+    </article>`).join('');
+  document.querySelector('#connector-warning').textContent = connectors.uncovered.length ? `کانال بدون اتصال: ${connectors.uncovered.map((item) => item.channel).join('، ')}` : 'همهٔ کانال‌های کمپین‌های فعلی پوشش داده شده‌اند؛ ارسال همچنان شبیه‌سازی است.';
+
+  document.querySelector('#loyalty').innerHTML = loyalty.allocation.map((reward) => `
+    <tr><td>${escape(reward.label)}</td><td>${formatCount(reward.points)}</td><td>${formatCount(reward.units)}</td><td>${formatIrr(reward.spend)}</td>
+    <td class="uplift">${formatIrr(reward.incrementalRevenue)}</td><td>${reward.unmetDemand ? formatCount(reward.unmetDemand) : '—'}</td></tr>`).join('');
+  document.querySelector('#loyalty-summary').textContent = `از بودجهٔ ${formatIrr(loyalty.budget)}، ${formatIrr(loyalty.spend)} تخصیص یافت؛ بازده برآوردی ${loyalty.roi === null ? '—' : `${decimal(loyalty.roi)}×`} · منبع تخصیص: uplift به ازای ریال هزینه (دادهٔ مصنوعی)`;
+
+  document.querySelector('#experiments').innerHTML = experiments.experiments.map((experiment) => `
+    <article class="experiment-card ${escape(experiment.decision)}">
+      <header><span class="pill ${experiment.decision === 'ship' ? 'sent' : experiment.decision === 'stop' ? 'bad' : ''}">${escape(decisions[experiment.decision])}</span><span class="channel">${escape(experiment.metric)}</span></header>
+      <h4>${escape(experiment.name)}</h4>
+      <p>${escape(experiment.segment)} · کنترل ${formatScore(experiment.controlRate)} → آزمون ${formatScore(experiment.treatmentRate)}</p>
+      <div class="campaign-foot"><span>اثر ${experiment.absoluteLift > 0 ? '+' : ''}${decimal(experiment.absoluteLift * 100)} واحد درصد</span><span>p = ${decimal(experiment.pValue)}</span></div>
+    </article>`).join('');
+  document.querySelector('#experiment-warning').textContent = `${experiments.warning} آزمون SRM: ${experiments.experiments.every((item) => item.srmPValue >= 0.01) ? 'سالم' : 'نیازمند بررسی'}.`;
+
+  document.querySelector('#timing').innerHTML = timing.segments.map((segment) => `
+    <tr><td>${escape(segment.segment)}</td><td>${escape(segment.window.label)}</td><td>${formatScore(segment.openRate)}</td><td>${formatCount(segment.projectedOpens)}</td>
+    <td>${decimal(segment.contactRate)} پیام/هفته</td>
+    <td>${segment.capExceeded ? `<span class="gap open">${formatScore(segment.suppressedShare)} حذف</span>` : '<span class="gap closed">در محدوده</span>'}</td></tr>`).join('');
 }
 
 function showView(view) {
@@ -120,8 +173,8 @@ async function getJson(path) {
 }
 
 async function load() {
-  const [overview, segments, campaigns, report, comparison] = await Promise.all([
-    getJson('/api/overview'), getJson('/api/segments'), getJson('/api/campaigns'), getJson('/api/report'), getJson('/api/comparison')
+  const [overview, segments, campaigns, report, comparison, growth] = await Promise.all([
+    getJson('/api/overview'), getJson('/api/segments'), getJson('/api/campaigns'), getJson('/api/report'), getJson('/api/comparison'), getJson('/api/growth')
   ]);
   document.querySelector('#value').textContent = formatIrr(overview.expectedIncrementalValue);
   document.querySelector('#roi').textContent = `${overview.expectedRoi}×`;
@@ -134,6 +187,7 @@ async function load() {
   renderCampaigns(campaigns.campaigns);
   renderReport(report);
   renderComparison(comparison);
+  renderGrowth(growth);
 }
 
 document.querySelector('#refresh-campaigns').addEventListener('click', async () => {

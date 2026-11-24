@@ -111,7 +111,7 @@ test('HTTP contracts: roles, concurrency, explanation, readiness and safe errors
       assert.equal(item.explanation.confidence, null);
     }
   }
-  for (const route of ['/', '/app.js', '/styles.css', '/api/health', '/api/ready', '/api/comparison', '/api/report']) {
+  for (const route of ['/', '/app.js', '/styles.css', '/api/health', '/api/ready', '/api/comparison', '/api/report', '/api/growth']) {
     assert.equal((await fetch(base + route)).status, 200);
   }
   const comparison = await (await fetch(base + '/api/comparison')).json();

@@ -15,6 +15,7 @@
         <button class="tab" data-view="segments" type="button">سگمنت‌بندی</button>
         <button class="tab" data-view="campaigns" type="button">کمپین</button>
         <button class="tab" data-view="report" type="button">گزارش</button>
+        <button class="tab" data-view="growth" type="button">موتور رشد</button>
         <button class="tab" data-view="comparison" type="button">مقایسهٔ رقابتی</button>
       </nav>
       <div class="hero-copy">
@@ -56,6 +57,31 @@
       <header class="section-heading"><div><p class="eyebrow">قابلیت افزوده‌شده</p><h2>گزارش مدیریتی</h2></div><span id="report-summary" class="hint">—</span></header>
       <div class="table-wrap"><table><thead><tr><th>ماه</th><th>درآمد افزایشی</th><th>بودجهٔ مصرف‌شده</th><th>بازده</th><th>رشد ماهانه</th></tr></thead><tbody id="report"></tbody></table></div>
       <div id="sparkline" class="sparkline" aria-label="روند درآمد افزایشی شش ماه"></div>
+    </section>
+
+    <section class="view" data-view-panel="growth">
+      <header class="section-heading"><div><p class="eyebrow">اسکن بازار · <span id="scan-as-of">—</span></p><h2>پنج قابلیت بازار که به ماند اضافه شد</h2></div><span id="scan-summary" class="hint">—</span></header>
+      <p class="hint" id="scan-methodology"></p>
+      <div class="table-wrap"><table class="matrix"><thead><tr><th>رقیب</th><th>بازار</th><th>پنج قابلیت برجسته</th><th>یادداشت</th></tr></thead><tbody id="rivals"></tbody></table></div>
+      <div id="feature-ranking" class="ranking"></div>
+
+      <h3 class="subheading">۱ · سازندهٔ سفر و اتوماسیون رفتار</h3>
+      <div id="journeys" class="journey-grid"></div>
+
+      <h3 class="subheading">۲ · هاب اتصال کانال‌ها</h3>
+      <div id="connectors" class="connector-grid"></div>
+      <p id="connector-warning" class="hint"></p>
+
+      <h3 class="subheading">۳ · کیف پول و بهینه‌سازی مشوق</h3>
+      <div class="table-wrap"><table><thead><tr><th>مشوق</th><th>امتیاز لازم</th><th>تخصیص</th><th>هزینه</th><th>درآمد افزایشی</th><th>تقاضای باقی‌مانده</th></tr></thead><tbody id="loyalty"></tbody></table></div>
+      <p id="loyalty-summary" class="hint"></p>
+
+      <h3 class="subheading">۴ · مرکز آزمایش و سنجش اثر افزایشی</h3>
+      <div id="experiments" class="experiment-grid"></div>
+      <p id="experiment-warning" class="hint"></p>
+
+      <h3 class="subheading">۵ · بهترین زمان ارسال و سقف فرکانس</h3>
+      <div class="table-wrap"><table><thead><tr><th>سگمنت</th><th>بهترین پنجره</th><th>نرخ باز شدن</th><th>باز شدن پیش‌بینی‌شده</th><th>فشار هفتگی</th><th>وضعیت سقف</th></tr></thead><tbody id="timing"></tbody></table></div>
     </section>
 
     <section class="view" data-view-panel="comparison">

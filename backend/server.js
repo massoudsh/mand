@@ -5,6 +5,7 @@ const { randomUUID } = require('node:crypto');
 const { buildOverview, loadSeed } = require('./data');
 const { buildComparison } = require('./market');
 const { buildSegments, buildCampaigns, buildReport } = require('./features');
+const { growthSnapshot } = require('./radar');
 const { createStore } = require('./store');
 const { createDispatcher } = require('./dispatch');
 const { readConfig, authorize } = require('./config');
@@ -40,6 +41,7 @@ function createServer({ config = readConfig(), store = createStore(config.dbPath
         if (url.pathname === '/api/segments') return sendJson(response, 200, { segments: buildSegments({ segments: store.run('segments') }) });
         if (url.pathname === '/api/campaigns') return sendJson(response, 200, { campaigns: buildCampaigns({ campaigns: store.run('campaigns') }) });
         if (url.pathname === '/api/report') return sendJson(response, 200, buildReport());
+        if (url.pathname === '/api/growth') return sendJson(response, 200, growthSnapshot(buildCampaigns({ campaigns: store.run('campaigns') })));
         if (files[url.pathname]) {
           const [file, type] = files[url.pathname];
           const content = fs.readFileSync(path.join(frontendDir, file));

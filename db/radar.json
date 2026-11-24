@@ -1,0 +1,114 @@
+{
+  "asOf": "۱۴۰۵/۰۹",
+  "scanDate": "2026-11-24",
+  "methodology": "بررسی صفحات محصول عمومی ده رقیب داخلی و خارجی در آذر ۱۴۰۵؛ پوشش هر قابلیت یک برآورد تحلیلی است و با مصاحبه یا قرارداد دادهٔ رسمی تأیید نشده است.",
+  "featureCatalog": [
+    {"key": "journey", "label": "سازندهٔ سفر و اتوماسیون رفتار"},
+    {"key": "personalization", "label": "شخصی‌سازی و پیشنهاد لحظه‌ای"},
+    {"key": "omnichannel", "label": "ارکستراسیون چندکاناله و اتصال CRM"},
+    {"key": "analytics", "label": "تحلیل رفتار و گزارش مدیریتی"},
+    {"key": "experimentation", "label": "آزمایش A/B و سنجش اثر افزایشی"},
+    {"key": "predict", "label": "پیش‌بینی ریزش و مخاطب پیش‌بینی‌شده"},
+    {"key": "timing", "label": "بهترین زمان ارسال و سقف فرکانس"},
+    {"key": "loyalty", "label": "باشگاه وفاداری و کیف پول مشوق"},
+    {"key": "crm", "label": "مدیریت فروش و مرکز تماس"}
+  ],
+  "rivals": [
+    {"name": "Braze", "region": "international", "category": "Customer engagement", "features": ["journey", "experimentation", "personalization", "omnichannel", "timing"], "note": "Canvas برای سفرهای رویدادمحور و زمان‌بندی هوشمند ارسال"},
+    {"name": "Iterable", "region": "international", "category": "Cross-channel marketing", "features": ["journey", "experimentation", "personalization", "omnichannel", "timing"], "note": "سفرهای چندکاناله با کارت‌های تعامل و بهینه‌سازی زمان ارسال"},
+    {"name": "CleverTap", "region": "international", "category": "Retention platform", "features": ["journey", "personalization", "predict", "analytics", "timing"], "note": "سگمنت پیش‌بینی‌شده و زمان ارسال مناسب برای هر کاربر"},
+    {"name": "MoEngage", "region": "international", "category": "Insights-led engagement", "features": ["journey", "personalization", "predict", "omnichannel", "analytics"], "note": "Flows و مخاطبان پیش‌بینی‌شده برای تیم‌های موبایل"},
+    {"name": "Insider One", "region": "international", "category": "Personalization suite", "features": ["journey", "experimentation", "personalization", "omnichannel", "loyalty"], "note": "شخصی‌سازی لحظه‌ای، آزمون و باشگاه وفاداری"},
+    {"name": "Optimove", "region": "international", "category": "Retention orchestration", "features": ["journey", "experimentation", "personalization", "loyalty", "analytics"], "note": "مدل مشتری و اندازه‌گیری افزایشی با تمرکز روی مشوق"},
+    {"name": "پیام‌گستر CRM", "region": "iran", "category": "CRM سازمانی", "features": ["journey", "omnichannel", "analytics", "crm", "personalization"], "note": "اتوماسیون بازاریابی، پیامک/ایمیل، مرکز تماس و گزارش"},
+    {"name": "دیدار CRM", "region": "iran", "category": "CRM فروش", "features": ["omnichannel", "crm", "analytics", "journey", "personalization"], "note": "تماس، پیامک و واتساپ یکپارچه با قیف فروش"},
+    {"name": "تیکو", "region": "iran", "category": "اتوماسیون بازاریابی", "features": ["journey", "omnichannel", "timing", "personalization", "analytics"], "note": "کمپین و پیام خودکار با زمان‌بندی و گزارش"},
+    {"name": "وفادار", "region": "iran", "category": "باشگاه مشتریان", "features": ["loyalty", "personalization", "journey", "analytics", "omnichannel"], "note": "امتیاز، کیف پول و مشوق قابل‌ردیابی"}
+  ],
+  "journeys": [
+    {
+      "id": "jn_revival",
+      "name": "بازگردانی خاموش‌ها",
+      "segment": "خاموشِ بازگشتی",
+      "trigger": "۷ روز بدون ورود",
+      "audience": 9860,
+      "avgOrder": 12000000,
+      "steps": [
+        {"day": 0, "label": "Push بازگشت", "channel": "push", "conversion": 0.18},
+        {"day": 2, "label": "SMS با پیشنهاد بازگشت", "channel": "sms", "conversion": 0.11},
+        {"day": 5, "label": "cashback شخصی", "channel": "inapp", "conversion": 0.07}
+      ]
+    },
+    {
+      "id": "jn_winback",
+      "name": "نجات وفادار در معرض ریزش",
+      "segment": "وفادارِ در معرض ریزش",
+      "trigger": "افت ۳۰٪ خرید در ۲۱ روز",
+      "audience": 11980,
+      "avgOrder": 24000000,
+      "steps": [
+        {"day": 0, "label": "بنر In-app", "channel": "inapp", "conversion": 0.12},
+        {"day": 1, "label": "Push پیشنهاد", "channel": "push", "conversion": 0.09},
+        {"day": 3, "label": "تماس مشاور", "channel": "call", "conversion": 0.22}
+      ]
+    },
+    {
+      "id": "jn_second",
+      "name": "خرید دوم",
+      "segment": "فعالِ فرصت‌پذیر",
+      "trigger": "اولین خرید",
+      "audience": 15660,
+      "avgOrder": 9000000,
+      "steps": [
+        {"day": 0, "label": "آموزش درون‌برنامه", "channel": "inapp", "conversion": 0.21},
+        {"day": 3, "label": "یادآور Push", "channel": "push", "conversion": 0.10},
+        {"day": 7, "label": "امتیاز وفاداری", "channel": "email", "conversion": 0.06}
+      ]
+    }
+  ],
+  "connectors": [
+    {"id": "push", "label": "Push", "channels": ["Push"], "unitCost": 800, "simulatedThroughput": 50000},
+    {"id": "sms", "label": "SMS", "channels": ["SMS"], "unitCost": 12000, "simulatedThroughput": 20000},
+    {"id": "inapp", "label": "In-app", "channels": ["In-app"], "unitCost": 300, "simulatedThroughput": 100000},
+    {"id": "email", "label": "Email", "channels": ["Email"], "unitCost": 200, "simulatedThroughput": 80000},
+    {"id": "whatsapp", "label": "WhatsApp", "channels": ["WhatsApp"], "unitCost": 9000, "simulatedThroughput": 15000},
+    {"id": "call", "label": "تماس", "channels": ["Call"], "unitCost": 25000, "simulatedThroughput": 2000}
+  ],
+  "experiments": [
+    {"id": "exp_301", "name": "cashback در برابر تخفیف ثابت", "segment": "بازگشتیِ ارزشمند", "metric": "نرخ بازگشت ۳۰ روزه", "control": {"users": 4200, "conversions": 420}, "treatment": {"users": 4180, "conversions": 502}, "guardrail": "نرخ شکایت"},
+    {"id": "exp_302", "name": "پیام اضافی برای کاربران کم‌فعال", "segment": "کم‌ارزشِ پرریسک", "metric": "نرخ خرید ۱۴ روزه", "control": {"users": 3800, "conversions": 494}, "treatment": {"users": 3840, "conversions": 402}, "guardrail": "نرخ لغو اشتراک"},
+    {"id": "exp_303", "name": "زمان ارسال عصر در برابر شب", "segment": "فعالِ فرصت‌پذیر", "metric": "نرخ باز شدن پیام", "control": {"users": 900, "conversions": 92}, "treatment": {"users": 880, "conversions": 99}, "guardrail": "نرخ لغو اشتراک"}
+  ],
+  "timing": {
+    "capPerWeek": 2,
+    "windows": [
+      {"key": "morning", "label": "صبح، ۹ تا ۱۱"},
+      {"key": "noon", "label": "ظهر، ۱۲ تا ۱۴"},
+      {"key": "evening", "label": "عصر، ۱۸ تا ۲۰"},
+      {"key": "night", "label": "شب، ۲۰ تا ۲۲"}
+    ],
+    "segments": [
+      {"segment": "خاموشِ بازگشتی", "audience": 9860, "openRates": {"morning": 0.11, "noon": 0.14, "evening": 0.29, "night": 0.33}, "recentSends": [4840, 8960, 7900, 6160]},
+      {"segment": "وفادارِ در معرض ریزش", "audience": 11980, "openRates": {"morning": 0.22, "noon": 0.19, "evening": 0.31, "night": 0.27}, "recentSends": [7210, 9700, 7870, 6200]},
+      {"segment": "فعالِ فرصت‌پذیر", "audience": 15660, "openRates": {"morning": 0.18, "noon": 0.24, "evening": 0.26, "night": 0.21}, "recentSends": [4260, 6120, 3880, 1400]}
+    ]
+  },
+  "loyalty": {
+    "tiers": [
+      {"id": "silver", "label": "نقره‌ای", "members": 18420, "avgBalance": 2400},
+      {"id": "gold", "label": "طلایی", "members": 7120, "avgBalance": 6900},
+      {"id": "platinum", "label": "پلاتینیوم", "members": 1980, "avgBalance": 14800}
+    ],
+    "rewards": [
+      {"id": "rw_content", "label": "محتوای ویژه", "points": 300, "cost": 120000, "uplift": 0.03, "expiryDays": 60},
+      {"id": "rw_shipping", "label": "ارسال رایگان", "points": 900, "cost": 600000, "uplift": 0.07, "expiryDays": 14},
+      {"id": "rw_discount", "label": "تخفیف ۱۰٪", "points": 1500, "cost": 900000, "uplift": 0.10, "expiryDays": 21},
+      {"id": "rw_cashback", "label": "بازگشت وجه ۵٪", "points": 1800, "cost": 1500000, "uplift": 0.18, "expiryDays": 30}
+    ],
+    "optimization": {
+      "budget": 150000000,
+      "avgOrder": 12000000,
+      "demand": {"rw_content": 500, "rw_shipping": 4000, "rw_discount": 2500, "rw_cashback": 1500}
+    }
+  }
+}

@@ -10,5 +10,5 @@ for (const dir of ['backend', 'frontend', 'scripts']) {
 }
 const python = spawnSync('python3', ['-c', 'import ast,pathlib; ast.parse(pathlib.Path("db/store.py").read_text())'], { cwd: root, stdio: 'inherit' });
 if (python.status !== 0) process.exit(1);
-for (const file of ['seed.json', 'features.json', 'market.json']) JSON.parse(fs.readFileSync(path.join(root, 'db', file), 'utf8'));
+for (const file of ['seed.json', 'features.json', 'market.json', 'radar.json']) JSON.parse(fs.readFileSync(path.join(root, 'db', file), 'utf8'));
 console.log('JavaScript, Python and JSON syntax checks passed');

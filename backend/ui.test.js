@@ -4,8 +4,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const { buildComparison } = require('./market');
+const { growthSnapshot } = require('./radar');
 
-test('comparison renders estimated disclaimers and explanation escapes markup without a browser', () => {
+function mountApp() {
   const elements = new Map();
   const element = (id) => {
     if (!elements.has(id)) elements.set(id, { innerHTML: '', textContent: '', addEventListener() {}, classList: { toggle() {} } });
@@ -17,6 +18,11 @@ test('comparison renders estimated disclaimers and explanation escapes markup wi
     fetch: async () => ({ ok: false })
   });
   vm.runInContext(fs.readFileSync(path.join(__dirname, '../frontend/app.js'), 'utf8'), context);
+  return { context, element };
+}
+
+test('comparison renders estimated disclaimers and explanation escapes markup without a browser', () => {
+  const { context, element } = mountApp();
   context.comparison = buildComparison();
   vm.runInContext('renderComparison(comparison)', context);
   assert.equal((element('#comparison').innerHTML.match(/برآورد تأییدنشده/g) || []).length, 8);
@@ -25,4 +31,18 @@ test('comparison renders estimated disclaimers and explanation escapes markup wi
   assert.ok(!html.includes('<script>'));
   assert.ok(html.includes('&lt;img&gt;'));
   assert.ok(html.includes('اطمینان آماری محاسبه نشده'));
+});
+
+test('growth view renders the ten-rival scan and five integrations without a browser', () => {
+  const { context, element } = mountApp();
+  context.growth = growthSnapshot([]);
+  vm.runInContext('renderGrowth(growth)', context);
+  assert.equal((element('#rivals').innerHTML.match(/<tr>/g) || []).length, 10);
+  assert.ok(element('#journeys').innerHTML.includes('بازگردانی خاموش‌ها'));
+  assert.equal((element('#connectors').innerHTML.match(/class="connector/g) || []).length, 6);
+  assert.equal((element('#experiments').innerHTML.match(/experiment-card/g) || []).length, 3);
+  assert.equal((element('#timing').innerHTML.match(/<tr>/g) || []).length, 3);
+  assert.ok(element('#loyalty').innerHTML.includes('بازگشت وجه'));
+  assert.ok(!element('#rivals').innerHTML.includes('<script'));
+  assert.equal(element('#scan-summary').textContent.includes('۱۰'), true);
 });
